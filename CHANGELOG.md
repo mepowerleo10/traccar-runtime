@@ -1,3 +1,10 @@
+## [1.1.5](https://github.com/mepowerleo10/traccar-runtime/compare/v1.1.4...v1.1.5) (2026-07-10)
+
+
+### Bug Fixes
+
+* update permissions and enhance image metadata in release workflow ([dad3166](https://github.com/mepowerleo10/traccar-runtime/commit/dad316698e937a1fb14ff8b9f5be191d30a10e23))
+
 ## [1.1.4](https://github.com/mepowerleo10/traccar-runtime/compare/v1.1.3...v1.1.4) (2026-07-10)
 
 
