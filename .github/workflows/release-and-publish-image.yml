@@ -84,7 +84,7 @@ jobs:
     needs: release
     if: needs.release.outputs.new_release_published == 'true'
     permissions:
-      contents: read
+      contents: write
       packages: write
 
     steps:
@@ -127,6 +127,9 @@ jobs:
             org.opencontainers.image.version=${{ steps.version.outputs.version }}
             org.opencontainers.image.title=${{ env.IMAGE_TITLE }}
             org.opencontainers.image.description=${{ env.IMAGE_DESCRIPTION }}
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.created=${{ github.event.head_commit.timestamp }}
 
       - name: Build and push
         uses: docker/build-push-action@v6
@@ -136,14 +139,28 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          platforms: linux/amd64,linux/arm64
+          cache-from: type=gha,scope=${{ github.ref_name }}
+          cache-to: type=gha,mode=max,scope=${{ github.ref_name }}
+          # platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           build-args: |
             BUILD_DATE=${{ github.event.head_commit.timestamp }}
             VCS_REF=${{ github.sha }}
             VCS_URL=${{ github.server_url }}/${{ github.repository }}
             VERSION=${{ steps.version.outputs.version }}
+
+      - name: Link image to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="v${{ steps.version.outputs.version }}"
+          IMAGE_REF="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}"
+          CURRENT_BODY=$(gh release view "$TAG" --json body -q .body)
+          gh release edit "$TAG" --notes "${CURRENT_BODY}
+
+          ---
+          **Image:** \`$IMAGE_REF\`
+          **Package:** ${{ github.server_url }}/${{ github.repository }}/pkgs/container/$(basename ${{ env.IMAGE_NAME }})"
 
       - name: Output image digest
         run: |
