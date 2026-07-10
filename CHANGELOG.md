@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/mepowerleo10/traccar-runtime/compare/v1.1.1...v1.1.2) (2026-07-10)
+
+
+### Bug Fixes
+
+* consolidate release workflows into a single file for improved clarity and maintenance ([ed19be6](https://github.com/mepowerleo10/traccar-runtime/commit/ed19be664c3997bd06d7230d5e9a88efb57c8375))
+
 ## [1.1.1](https://github.com/mepowerleo10/traccar-runtime/compare/v1.1.0...v1.1.1) (2026-07-10)
 
 
