@@ -1,0 +1,61 @@
+{
+  "event": {
+    "id": 10,
+    "attributes": {
+      "speed": 0.0777536,
+      "speedLimit": 0.0026997840172786176
+    },
+    "deviceId": 1,
+    "type": "deviceOverspeed",
+    "eventTime": "2025-09-28T09:00:20.615+00:00",
+    "positionId": 26,
+    "geofenceId": 0,
+    "maintenanceId": 0
+  },
+  "position": {
+    "id": 26,
+    "attributes": {
+      "motion": true,
+      "odometer": 0,
+      "activity": "still",
+      "batteryLevel": 100,
+      "distance": 0.0,
+      "totalDistance": 8.2035575424035
+    },
+    "deviceId": 1,
+    "protocol": "osmand",
+    "serverTime": "2025-09-28T09:02:48.764+00:00",
+    "deviceTime": "2025-09-28T09:00:20.615+00:00",
+    "fixTime": "2025-09-28T09:00:20.615+00:00",
+    "valid": true,
+    "latitude": -6.707878,
+    "longitude": 39.2049892,
+    "altitude": 20.3,
+    "speed": 0.0777536,
+    "course": 0.0,
+    "address": null,
+    "accuracy": 15.78,
+    "network": null,
+    "geofenceIds": null
+  },
+  "device": {
+    "id": 1,
+    "attributes": {
+      "notificationTokens": "dVJgVqASQ36s_a1lchLlLR:APA91bErbg7N0AQBjGhzqXNtpE814Amc7vDx9W4dxRZV3Pf9qDHGiGtsyXxKF8F9ZXHOr3RGVv8_5Iooc0_yN_ciqAdOmUGSzp9_MXyaN7DNS1RtnYKIT8M",
+      "speedLimit": 0.0026997840172786176
+    },
+    "groupId": 0,
+    "calendarId": 0,
+    "name": "Me",
+    "uniqueId": "66668797",
+    "status": "online",
+    "lastUpdate": "2025-09-28T09:02:48.765+00:00",
+    "positionId": 25,
+    "phone": null,
+    "model": null,
+    "contact": null,
+    "category": null,
+    "disabled": false,
+    "expirationTime": null
+  }
+}

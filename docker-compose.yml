@@ -1,0 +1,124 @@
+networks:
+  traccar-net:
+    name: "traccar-net"
+  traccar-broker-net:
+    name: "traccar-broker-net"
+
+volumes:
+  database_data:
+
+services:
+  database:
+    image: mysql:8.4
+    container_name: vht_traccar_mysql
+    # restart: unless-stopped
+    env_file:
+      - mysql.env
+    volumes:
+      - database_data:/var/lib/mysql
+    networks:
+      - traccar-net
+
+  # Prebuilt image service (commented out in favor of local build)
+  # traccar:
+  #   image: traccar/traccar:latest
+  #   container_name: vtp_traccar
+  #   # restart: unless-stopped
+  #   depends_on:
+  #     - database
+  #   # healthcheck:
+  #   #   test: [ "CMD", "wget", "-q", "--spider", "http://localhost:8082/api/health" ]
+  #   #   interval: 2m
+  #   #   timeout: 5s
+  #   #   start_period: 1h
+  #   #   retries: 3
+  #   env_file:
+  #     - traccar.env
+  #   ports:
+  #     - "8082:8082"
+  #     - "5000-5150:5000-5150"
+  #     - "5000-5150:5000-5150/udp"
+  #   volumes:
+  #     - ./logs/traccar:/opt/traccar/logs:rw
+  #   networks:
+  #     - traccar-net
+  #     - traccar-broker-net
+
+  # Local build service
+  traccar:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: traccar-local:latest
+    container_name: vtp_traccar
+    # restart: unless-stopped
+    depends_on:
+      - database
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "--spider", "http://localhost:8082/api/health" ]
+      interval: 2m
+      timeout: 5s
+      start_period: 1h
+      retries: 3
+    env_file:
+      - traccar.env
+    ports:
+      - "8082:8082"
+      - "5000-5150:5000-5150"
+      - "5000-5150:5000-5150/udp"
+    volumes:
+      - ./logs/traccar:/opt/traccar/logs:rw
+    networks:
+      - traccar-net
+      - traccar-broker-net
+
+  autoheal:
+    image: willfarrell/autoheal:latest
+    container_name: vtp_traccar_autoheal
+    # restart: unless-stopped
+    environment:
+      AUTOHEAL_CONTAINER_LABEL: all
+      AUTOHEAL_INTERVAL: 60
+      AUTOHEAL_START_PERIOD: 3600
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - traccar-net
+
+  broker:
+    image: apache/kafka:latest
+    container_name: vtp_traccar_kafka
+    # restart: unless-stopped
+    env_file:
+      - kafka.env
+    networks:
+      - traccar-broker-net
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+      - "9094:9094" # for external listeners
+    volumes:
+      - ./logs/kafka-data:/tmp/kafka-logs:rw
+      # Kafka internal logs (JVM logs, GC logs, etc.)
+      - ./logs/kafka-internal:/opt/kafka/logs:rw
+
+  init-kafka:
+    image: apache/kafka:latest
+    container_name: vtp_traccar_kafka_init
+    depends_on:
+      - broker
+    env_file:
+      - kafka.env
+    networks:
+      - traccar-broker-net
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "Waiting for Kafka to be ready..."
+        until /opt/kafka/bin/kafka-topics.sh --bootstrap-server broker:9092 --list > /dev/null 2>&1; do
+          sleep 2
+        done
+        echo "Kafka is ready. Creating topics..."
+        /opt/kafka/bin/kafka-topics.sh --bootstrap-server broker:9092 --create --if-not-exists --topic positions --partitions $${KAFKA_NUM_PARTITIONS} --replication-factor $${KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR}
+        /opt/kafka/bin/kafka-topics.sh --bootstrap-server broker:9092 --create --if-not-exists --topic events --partitions $${KAFKA_NUM_PARTITIONS} --replication-factor $${KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR}
+        echo "Topics created successfully."
