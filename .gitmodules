@@ -1,0 +1,4 @@
+[submodule "traccar"]
+	path = code
+	url = https://github.com/traccar/traccar.git
+	branch = master
