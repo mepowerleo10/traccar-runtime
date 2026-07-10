@@ -1,3 +1,10 @@
+## [1.1.4](https://github.com/mepowerleo10/traccar-runtime/compare/v1.1.3...v1.1.4) (2026-07-10)
+
+
+### Bug Fixes
+
+* use environment variables for image title and description in Docker metadata ([06ad7c4](https://github.com/mepowerleo10/traccar-runtime/commit/06ad7c479648b1129acbaed9a82c66b6da8c26c4))
+
 ## [1.1.3](https://github.com/mepowerleo10/traccar-runtime/compare/v1.1.2...v1.1.3) (2026-07-10)
 
 
