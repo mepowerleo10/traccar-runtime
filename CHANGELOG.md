@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/mepowerleo10/traccar-runtime/compare/v1.0.0...v1.1.0) (2026-07-10)
+
+
+### Features
+
+* Update Docker image metadata for Traccar custom image ([ad23983](https://github.com/mepowerleo10/traccar-runtime/commit/ad239833c6ff5ea6efe48e5943de484f95f85a4f))
+
 # 1.0.0 (2026-07-10)
 
 
