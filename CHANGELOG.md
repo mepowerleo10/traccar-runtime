@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/mepowerleo10/traccar-runtime/compare/v1.1.0...v1.1.1) (2026-07-10)
+
+
+### Bug Fixes
+
+* build image on new releases ([39818f5](https://github.com/mepowerleo10/traccar-runtime/commit/39818f54c4a392b82846a40ea8726a62d4fe2a57))
+
 # [1.1.0](https://github.com/mepowerleo10/traccar-runtime/compare/v1.0.0...v1.1.0) (2026-07-10)
 
 
