@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/mepowerleo10/traccar-runtime/compare/v1.1.2...v1.1.3) (2026-07-10)
+
+
+### Bug Fixes
+
+* enhance version reading and release output determination in workflow ([928e29f](https://github.com/mepowerleo10/traccar-runtime/commit/928e29f1a19b8f27adb1e90e35ac79722d184300))
+
 ## [1.1.2](https://github.com/mepowerleo10/traccar-runtime/compare/v1.1.1...v1.1.2) (2026-07-10)
 
 
