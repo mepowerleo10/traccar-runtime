@@ -44,16 +44,37 @@ jobs:
             @semantic-release/github \
             @semantic-release/git
 
+      - name: Read version before release
+        id: before
+        run: |
+          if [ -f VERSION ]; then
+            echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
+          else
+            echo "version=" >> $GITHUB_OUTPUT
+          fi
+
       - name: Run semantic-release
-        id: semantic
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
 
-      - name: Release output
-        if: steps.semantic.outputs.new_release_published == 'true'
+      - name: Determine release outputs
+        id: semantic
         run: |
-          echo "New release published: ${{ steps.semantic.outputs.new_release_version }}"
+          if [ -f VERSION ]; then
+            NEW_VERSION=$(cat VERSION)
+          else
+            NEW_VERSION=""
+          fi
+
+          if [ -n "$NEW_VERSION" ] && [ "$NEW_VERSION" != "${{ steps.before.outputs.version }}" ]; then
+            echo "new_release_published=true" >> $GITHUB_OUTPUT
+            echo "new_release_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+            echo "New release published: $NEW_VERSION"
+          else
+            echo "new_release_published=false" >> $GITHUB_OUTPUT
+            echo "No new release published"
+          fi
 
   publish-image:
     name: Build and Push
