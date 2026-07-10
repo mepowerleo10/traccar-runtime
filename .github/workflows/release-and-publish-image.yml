@@ -9,6 +9,8 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  IMAGE_TITLE: Traccar Custom Image
+  IMAGE_DESCRIPTION: Platform for vehicle tracking
 
 permissions:
   contents: write
@@ -123,8 +125,8 @@ jobs:
             type=raw,value=dev,enable=${{ steps.version.outputs.prerelease == 'true' }}
           labels: |
             org.opencontainers.image.version=${{ steps.version.outputs.version }}
-            org.opencontainers.image.title=Traccar Custom Image
-            org.opencontainers.image.description=Platform for vehicle tracking
+            org.opencontainers.image.title=${{ env.IMAGE_TITLE }}
+            org.opencontainers.image.description=${{ env.IMAGE_DESCRIPTION }}
 
       - name: Build and push
         uses: docker/build-push-action@v6
